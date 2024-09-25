@@ -1,8 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using TODO_API.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
+
+builder.Services.AddDbContext<TicketContext>(opt =>
+	opt.UseNpgsql(
+		builder.Configuration.GetConnectionString("DefaultConnection"),
+		o => o
+			.SetPostgresVersion(14, 0)
+));
+
+/*builder.Services.AddDbContext<TicketContext>(opt =>
+	opt.UseInMemoryDatabase("TODO"));*/
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
